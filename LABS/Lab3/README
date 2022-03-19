@@ -1,0 +1,74 @@
+Author: Mitchell Krystofiak
+Class: COSC420 - Lab3
+Date: October 31, 2021
+**NEW SUBMISSION -> Date: November 7 2021
+
+Description:
+------------
+
+This lab demonstrates the Gauss Jordan (row reduction) algorithm. It utilizes
+MPI parallelizaiton between multiple processors. It is meant to be used to determine
+the Inverse of a Matrix or solve a system of equations in matrix equations.
+
+**New
+
+This lab also compares the addition, multiplication, subtraction, inner product and subtraction
+matrix operations after using cache blocking techniques.
+
+This lab also tests 1 file write and read process. It accepts a file input, however it does not yet
+read it in to work with :(.
+
+To Run:
+-------
+
+For default cases: mpirun -n (Number of nodes) ./l3
+
+For matrix file input: mpirun -n (Number of nodes) ./l3 (inputfile)
+
+For leak testing: mpirun -n (Number of nodes) valgrind --leak-check=full ./l3
+
+Questions:
+----------
+
+(a) The theoretical time complexity of this lab follows the same time complexity as
+the last lab: 
+Matrix Multiplication: O(i*j*k/p) 
+Matrix Addition and Subtraction: O(i*j/p)
+Matrix Transpose: O(n)
+
+Gauss Jordan runs in O(i*j*k/p) time where a fraction of each matrix (by rows) are sent 
+to each processor p with square matrices. 
+
+Cache blocking seems to divide alot of operations by more than 2. It seems the speedup tends
+to drop as we operate on large matrices, most likely because we are constantly maxing out
+the cache size, forcing it to miss.
+
+
+(b) The time does not perfectly divide. Every added node increases communication costs, i.e.
+scatters, gathers, bcasts. There is speedup but it is not perfect.
+
+
+(c) One direct application that I am currently working with is sports ranking data. Colley's method
+, Massey's method, and Markov's method all require solving matrix equations to determine a teams
+ranking. This is also pure linear algebra. Video game graphics and much more operate by these 
+operations.
+
+
+(d)
+
+- There are some obvious speedups that can be achieved with cache blocking, which would force the 
+  program to run in the L1 cache instead of being sent to RAM or slower caches. We also can use MPI_Datatypes 
+  and more to make this more efficient.
+
+- In terms of cache blocking, we used the size of the L1 cache = 32000 bytes to build blocks of bytes
+  to force nodes to stay within the cache. Each rank received sendcounts[myRank] items, or sendcount[myRank]*sizeof(double)
+  bytes. We can use this to make sure we stay within the boundaries of our L1 cache and reuse no longer needed values.
+
+- The Gauss Jordan now works again! It worked before, I changed some things, it stopped working, deleted everything
+  and tried again, still didn't work, starting printing out some things, noticed that the identity matrix was not 
+  making things pretty. I was initializing the diagonals only to 1 and I supposed the other values were either assuming 0
+  or something fishy. --> They now initialize to 0.
+
+- For now, it works, but there is a major slow down within the Gauss Jordan function. It seems that the only time it works
+  is if the Gatherv is inside of the last for loop, causing major communication slow down. I will worry about fixing this later,
+  but this is also essential to update the temporary matrix values.

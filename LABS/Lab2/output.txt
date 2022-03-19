@@ -1,0 +1,258 @@
+Initializing a 20x1 vector, v1.
+
+2.00 
+17.00 
+19.00 
+6.00 
+20.00 
+1.00 
+33.00 
+65.00 
+77.00 
+24.00 
+2.00 
+26.00 
+21.00 
+84.00 
+94.00 
+95.00 
+60.00 
+5.00 
+8.00 
+35.00 
+
+Initializing a 20x1 vector, v2.
+
+45.00 
+13.00 
+13.00 
+83.00 
+26.00 
+52.00 
+47.00 
+47.00 
+29.00 
+81.00 
+13.00 
+82.00 
+49.00 
+84.00 
+87.00 
+68.00 
+36.00 
+20.00 
+85.00 
+12.00 
+
+Initializing a 500x1 vector, v3.
+
+Initializing a 500x1 vector, v4.
+
+Initializing a 3563x1 vector, v5.
+
+Initializing a 3563x1 vector, v6.
+
+Initializing a 7693x1 vector, v7.
+
+Initializing a 7693x1 vector, v8.
+
+Initializing a 15000x1 vector, v9.
+
+Initializing a 15000x1 vector, v10.
+
+Initializing a 3x3 matrix, A.
+
+0.00 0.00 0.00 
+0.00 0.00 0.00 
+0.00 0.00 0.00 
+
+Initializing a 3x3 matrix, B.
+
+50.00 80.00 50.00 
+99.00 59.00 77.00 
+67.00 64.00 58.00 
+
+Initializing a 3x3 matrix, C.
+
+0.00 0.00 0.00 
+0.00 0.00 0.00 
+0.00 0.00 0.00 
+
+Initializing a 3x3 matrix, D.
+
+0.00 0.00 0.00 
+0.00 0.00 0.00 
+0.00 0.00 0.00 
+
+Initializing a 2x4 matrix, E.
+
+21.00 96.00 73.00 93.00 
+21.00 13.00 52.00 21.00 
+
+Initializing a 4x3 matrix, F.
+
+81.00 41.00 92.00 
+13.00 44.00 100.00 
+98.00 59.00 94.00 
+5.00 35.00 90.00 
+
+Initializing a 10x10 matrix, G.
+
+43.00 82.00 40.00 22.00 31.00 90.00 33.00 8.00 56.00 96.00 
+65.00 29.00 43.00 89.00 73.00 16.00 1.00 24.00 36.00 33.00 
+17.00 79.00 45.00 60.00 30.00 95.00 18.00 76.00 99.00 4.00 
+65.00 93.00 85.00 4.00 67.00 16.00 45.00 99.00 75.00 1.00 
+46.00 91.00 81.00 40.00 79.00 53.00 55.00 31.00 28.00 91.00 
+63.00 44.00 69.00 8.00 55.00 99.00 54.00 24.00 74.00 4.00 
+27.00 90.00 97.00 12.00 46.00 63.00 79.00 90.00 13.00 53.00 
+42.00 58.00 43.00 22.00 97.00 73.00 26.00 4.00 3.00 6.00 
+94.00 65.00 49.00 14.00 24.00 56.00 12.00 77.00 79.00 37.00 
+81.00 6.00 27.00 29.00 69.00 72.00 91.00 47.00 61.00 55.00 
+
+Initializing a 10x1 matrix, H.
+
+51.00 
+3.00 
+64.00 
+45.00 
+76.00 
+12.00 
+17.00 
+54.00 
+15.00 
+71.00 
+
+Initializing a 2x3 matrix, I.
+
+0.00 0.00 0.00 
+0.00 0.00 0.00 
+
+Initializing a 10x1 matrix, J.
+
+0.00 
+0.00 
+0.00 
+0.00 
+0.00 
+0.00 
+0.00 
+0.00 
+0.00 
+0.00 
+
+Initializing a 10x1 matrix, K.
+
+59.00 
+8.00 
+35.00 
+7.00 
+22.00 
+11.00 
+62.00 
+85.00 
+39.00 
+93.00 
+
+Initialzing a 3000x3000 matrix, L1.
+
+Initialzing a 3000x3000 matrix, L2.
+
+Initialzing a 4500x6783 matrix, L3.
+
+Initialzing a 150452x15987 matrix, L4.
+
+Initialzing a 15987x15765 matrix, L5.
+
+Initialzing a 3000x3000 matrix, L6.
+
+Initialzing a 15452x15765 matrix, L7.
+
+Time taken A+B: 0.000067 seconds.
+
+Time taken A-B: 0.000021 seconds.
+
+Time taken E*F: 0.000083 seconds.
+
+Time taken G*H: 0.000064 seconds.
+
+Time taken v1*v2: 0.000010 seconds.
+
+Time taken v3*v4: 0.000022 seconds.
+
+Time taken v5*v6: 0.000032 seconds.
+
+Time taken v7*v8: 0.000073 seconds.
+
+Time taken v9*v10: 0.000090 seconds.
+
+Testing the functionality of the inner product function.
+
+v1 * v2 = 38652.00
+v3 * v4 = 1301598.00
+v5 * v6 = 8966256.00
+v7 * v8 = 19583727.00
+v9 * v10 = 39303697.00
+
+
+Time taken E^T: 0.000000
+
+Testing operations.
+
+Matrix C = A + B:
+
+50.00 80.00 50.00 
+99.00 59.00 77.00 
+67.00 64.00 58.00 
+
+
+Matrix D = A - B:
+
+-50.00 -80.00 -50.00 
+-99.00 -59.00 -77.00 
+-67.00 -64.00 -58.00 
+
+
+Matrix E = E Transpose:
+
+21.00 21.00 
+96.00 13.00 
+73.00 52.00 
+93.00 21.00 
+
+
+Matrix I = E * F:
+
+10568.00 12647.00 26764.00 
+7071.00 5236.00 10010.00 
+
+
+Matrix J = G * H:
+
+18074.00 
+20095.00 
+16283.00 
+21805.00 
+25733.00 
+17097.00 
+22808.00 
+15435.00 
+19425.00 
+22195.00 
+
+Testing large operations! :)
+These won't be printed out, but 'Done' will print when complete.
+
+L1 + L2, Done.
+
+Time taken L1+L2: 0.064809 seconds.
+
+L1 - L2, Done.
+
+Time taken L1-L2: 0.064420 seconds.
+
+L3 transpose, Done.
+
+Time taken L3^T: 0.135578 seconds.
+
+[mpiexec@hslinux.salisbury.edu] Sending Ctrl-C to processes as requested
+[mpiexec@hslinux.salisbury.edu] Press Ctrl-C again to force abort

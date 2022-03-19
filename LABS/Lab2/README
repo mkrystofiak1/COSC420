@@ -1,0 +1,45 @@
+Author: Mitchell Krystofiak
+Class: COSC 420 - Lab 2
+Date: September 29, 2021
+
+Start Instructions:
+
+module load mpi/mpich-3.2-x86_64
+make
+mpirun -n N ./matrix (N number of processors)
+
+To send to Cluster:
+
+sbatch slurm.sh
+
+See: output.txt
+
+Discussion:
+
+1. Looking at matrix addition and subtraction, the time will take NM/P with N rows, M cols and P node or processors
+   being ran. Which makes the best and worst case O(NM/P) or O(N);
+  
+   Inner Product has the same time complexity, with N elements in a vector over P processors, so O(N).
+
+   Matrix Transpose, same amount of time, O(N). This is unparallelized.
+
+   Matrix Multiplication, a little different. We have N A->rows, M B->cols, and K A->cols or B->rows, which makes our 
+   time complexity NMK/P, O(NMK/P).  
+
+2. The program's time does not evenly divide by the number of nodes. Looking especially at the matrix multiplication
+   algorithm, dealing with high numbers of rows and columns adds more calls to the innerproduct method, which heavily
+   impacts the timing of the program, more than adding nodes reduces the time.
+
+3. There are many applications. For starters, anything that uses linear algebra. Performing operations between
+   matrices is important in linear algebra and multivariable calculus. Other uses include video game graphics,
+   graph theory, and recurrence relations.
+
+4. The code is pretty capable of running large inner products, subtractions, additions, and multiplications. 
+   Multiplication seems to take the longest, obviously because it has a lot more work to do. I tried adding
+   several MPI_Barrier(world)'s and MPI_Wtime()'s to the program to find the exact time of each operation,
+   but the work became tiresome and difficult to manage. I would suggest adding a method used to time each 
+   operation. The code also does not allow user input for matrix testing, or reading in of any data for 
+   practical use. This code simply just tests the capabilities of the matrix library that runs in parallel.
+   
+   The matrix multiplication method is not the greatest. It does the easiest, but most inefficient method of
+   calling several innerproducts. 

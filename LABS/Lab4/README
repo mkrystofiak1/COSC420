@@ -1,0 +1,58 @@
+Author: Mitchell Krystofiak
+Class: COSC 420 - Lab4
+Date: November 8, 2021
+
+Description:
+
+This lab demonstrates the parallel eigenvector calculation of a matrix. The matrix is 
+converted into a MPI_File and then read in the EigenVector function. This is easily
+translatable for file input.
+
+View 'Lab4-Averages.xlsx' for details on number of nodes, times to complete the 
+Eigen Vector calculation, and the norm.
+
+
+Files:
+
+-Run 'make' to prepare the executable. 'make clean' will clean the existing object files and executables.
+
+-The main file for this is 'l4'. Run mpirun -n (number of nodes) ./l4 to run this program.
+
+-'output.txt' is the 10 node preview of this code.
+
+-'Matrix.data' is the stored Matrix file created in main.c
+
+
+Questions:
+
+(a) The time complexity of the EigenVector algorithm depends on many different function,
+	including subtraction, multiplication and norm. In the end, this function runs on
+	O((n/p)^3) time.
+
+(b) Adding more nodes does not evenly divide the time. In the Lab4 Averages file,
+	we can easily see that the time doesn't really change for more nodes. There are
+	some instances where the speedup is obvious, but in general, more nodes means
+	faster running time, but more communcations, which tends to balance the speedup.
+
+(c) Eigenvalues play a large role in many scientific fields, including engineering, mathematics, 
+	physics and computer science. These include facial recognition, bridge design, matrix
+	diagonalization, and more.
+
+	Facial recognition is an especially useful one, where an eigenvalue 'stretches' or 'contracts'
+	which is similar in images that have a shearing effect on them. Being able to determine facial
+	features even under alteration may prove useful for future security technologies.
+
+(d) This program still does not take file input, though it is very close to it. The problem I was having
+	was figuring out how to set up the dimensions being read in. Theoretically, we want to either 
+	create a file with the first line containing 2 ints (rows, cols) or create two separate files,
+	one with the dimensions and one with the matrix data.
+
+	One potential issue is the actual returned Eigen vector. It seems to return the normalized version
+	instead of the actual eigenvalues. I'm not sure if this is bad, or good, but I have confirmed that
+	this is what is happening via calculators online.
+
+	It appears the calculations are very fast, so it would be nice in the future to set up the larger 
+	test cases (i.e. >10000) since they will most likely finish in managable time.
+
+	Using MPI_File Views, MPI_Datatypes and more will obviously speed up the code, for all of the 
+	coded matrix operations.

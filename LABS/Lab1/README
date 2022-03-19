@@ -1,0 +1,162 @@
+Author: Mitchell Krystfiak
+Class: COSC 420 - Lab1
+Date: September 10, 2021
+
+Output and Timings:
+
+hello.c:
+
+[mkrystofiak1@hslinux Lab1]$ time mpirun -n 5 ./hello
+Hello, world! from rank 0 out of 5. My processor name is hslinux.salisbury.edu.
+Hello, world! from rank 4 out of 5. My processor name is hslinux.salisbury.edu.
+Hello, world! from rank 1 out of 5. My processor name is hslinux.salisbury.edu.
+Hello, world! from rank 2 out of 5. My processor name is hslinux.salisbury.edu.
+Hello, world! from rank 3 out of 5. My processor name is hslinux.salisbury.edu.
+
+real    0m0.035s
+user    0m0.018s
+sys     0m0.065s
+[mkrystofiak1@hslinux Lab1]$ time mpirun -n 5 ./hello
+Hello, world! from rank 3 out of 5. My processor name is hslinux.salisbury.edu.
+Hello, world! from rank 1 out of 5. My processor name is hslinux.salisbury.edu.
+Hello, world! from rank 0 out of 5. My processor name is hslinux.salisbury.edu.
+Hello, world! from rank 4 out of 5. My processor name is hslinux.salisbury.edu.
+Hello, world! from rank 2 out of 5. My processor name is hslinux.salisbury.edu.
+
+real    0m0.025s
+user    0m0.022s
+sys     0m0.042s
+[mkrystofiak1@hslinux Lab1]$ time mpirun -n 5 ./hello
+Hello, world! from rank 0 out of 5. My processor name is hslinux.salisbury.edu.
+Hello, world! from rank 2 out of 5. My processor name is hslinux.salisbury.edu.
+Hello, world! from rank 3 out of 5. My processor name is hslinux.salisbury.edu.
+Hello, world! from rank 4 out of 5. My processor name is hslinux.salisbury.edu.
+Hello, world! from rank 1 out of 5. My processor name is hslinux.salisbury.edu.
+
+real    0m0.025s
+user    0m0.023s
+sys     0m0.041s
+
+
+prime.c:
+
+*	Excluded large tests for example output because of large returns.
+*	I couldn't think of a better way at the moment to record what indices
+*	each node is testing :\.
+
+[mkrystofiak1@hslinux Lab1]$ time mpirun -n 5 ./prime 11
+Rank 2 of 5 returned 1
+
+Rank 4 of 5 returned 1
+
+Rank 1 of 5 is testing index 3
+Rank 1 of 5 returned 1
+
+Rank 3 of 5 returned 1
+
+Rank 0 of 5 is testing index 2
+Rank 0 of 5 returned 1
+
+
+real    0m0.031s
+user    0m0.016s
+sys     0m0.062s
+
+[mkrystofiak1@hslinux Lab1]$ time mpirun -n 6 ./prime 100
+Rank 0 of 6 is testing index 2
+Rank 0 found Factorization: 100 = 2 * 50
+Rank 0 of 6 returned 0
+
+Rank 5 of 6 is testing index 7
+Rank 5 of 6 returned 1
+
+Rank 1 of 6 is testing index 3
+Rank 1 of 6 is testing index 9
+Rank 1 of 6 returned 1
+
+Rank 4 of 6 is testing index 6
+Rank 4 of 6 returned 1
+
+Rank 2 of 6 is testing index 4
+Rank 2 found Factorization: 100 = 4 * 25
+Rank 2 of 6 returned 0
+
+Rank 3 of 6 is testing index 5
+Rank 3 found Factorization: 100 = 5 * 20
+Rank 3 of 6 returned 0
+
+
+real    0m0.035s
+user    0m0.040s
+sys     0m0.055s
+
+[mkrystofiak1@hslinux Lab1]$  time mpirun -n 6 ./prime 155
+Rank 2 of 6 is testing index 4
+Rank 2 of 6 is testing index 10
+Rank 2 of 6 returned 1
+
+Rank 3 of 6 is testing index 5
+Rank 3 found Factorization: 155 = 5 * 31
+Rank 3 of 6 returned 0
+
+Rank 4 of 6 is testing index 6
+Rank 4 of 6 is testing index 12
+Rank 4 of 6 returned 1
+
+Rank 0 of 6 is testing index 2
+Rank 0 of 6 is testing index 8
+Rank 0 of 6 returned 1
+
+Rank 1 of 6 is testing index 3
+Rank 1 of 6 is testing index 9
+Rank 1 of 6 returned 1
+
+Rank 5 of 6 is testing index 7
+Rank 5 of 6 returned 1
+
+
+real    0m0.043s
+user    0m0.017s
+sys     0m0.094s
+
+
+
+Excercises:
+
+(a) The theoretical time complexity of this program should be O(sqrt(n)). In theory, splitting
+	the number of indices checked up between the nodes should add in a constant that splits
+	the time up evenly between the nodes (more to be discussed in part c). For example,
+	5 nodes should give the program O(sqrt(n)/5) time, hypothetically, in theory...
+
+(b) I'm not entirely sure how the number of print statements afect the cost, but I know that it 
+	costs at least 1 operation*n nodes. The for loop is very minimal and only checks the 
+	divisibility between i and n, which I think is a very fast approach to the problem.
+
+(c) I'd like to point out something interesting: when I use 1 node, it appears to be super fast.
+	I'm going to assume that this means that calling 1 node has either more power since it's
+	not divided up that much, or it is automatically running like normal.
+	
+	By looking at the unit rates of each time statistic (calculated by taking t-real/number
+	of nodes), I can compare how much the time is divided between the nodes. Now, this isn't
+	a perfect science, considering if there are 5 nodes and we are dealing with input = 144,
+	rank 0 would test indices 2, 6, 10, and 1 would test 3, 7 , 11, but rank 2 would test 4, 8,
+	rank 3 would test 5, 9, and 4 would test 6, 10. So, each node is not necessarily performing
+	the same amount of work. But the unit rate is just an average. But, by comparing the recordings
+	for say 455 (more tests in the excel file), when we use 4 nodes, the average node takes .00825
+	seconds. When we use 5 nodes, the average node takes .0058 seconds (about double the 4 nodes time).
+	When we use 8 nodes, the average node takes .005 seconds. 
+	
+	It does not appear to be divided perfecty by the number of nodes. 
+
+(d) Assume that a number n is not prime. That would mean that n = a*b, meaning that a and b are
+	factors of n. a and b both cannot be greater than the sqrt(n) because if that were the 
+	case, the result of a*b > sqrt(n)*sqrt(n) = n. Thus, at least one of the factors must be
+	less than the sqrt(n), and if we can't find any, the number is prime. 
+
+(e) In terms of usability, the output seems pretty messy. I wanted to make a way for the output
+	to be "Rank n checked indices (a+n, b+n)" or "from a to b skipping by n" but my brain 
+	isn't working. I also wanted the output to say "Prime" or "Composite", but I was having
+	issues with c-strings and using an if statement to change.
+	I also struggled with the mpi package. I wanted the program to stop running other nodes
+	when it found a composite factorization, but I couldn't figure out how to get MPI_Abort
+	to work that way. I will bother you about this.
