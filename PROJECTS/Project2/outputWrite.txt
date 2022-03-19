@@ -1,0 +1,7 @@
+Max id length: 16
+Max title length: 382
+Max author length: 36662
+Max abstract length: 6089
+Total papers: 1628188
+Updates (id,ti,au,ab): (3, 15, 22, 19)
+Total bytes in file: 1678190545

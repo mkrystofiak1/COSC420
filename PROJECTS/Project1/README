@@ -1,0 +1,182 @@
+Author: Mitchell Krystofiak
+Class: COSC 420 - Project1: Password Cracking
+Date: October 17, 2021
+
+Program Description:
+--------------------
+This program "cracker.c" uses MPI to run in parallel on several different nodes. It utilizes
+many different string operations to test several different possible passwords against a given
+"shadow.txt" file, which holds 11 unique hashed passwords along with the user who holds that
+password. This is done by parsing through a given dictionary, "words.txt" which contains 
+235,888 words, while appending up to 4 digits to the beginning and ending of each word.
+
+For example:
+
+"ostrich2345", "2345ostrich", "a0000", "00red"
+
+The "guessed" password goes through the 'crypt' function after extracting the given user's
+algorithm id and salt. If the encrypted guess equals the encrypted password, we have cracked
+that password.
+
+The nodes, other than the root, will report their findings to the root node and print into 
+a neat and organized output file.
+
+
+Instructions for Running:
+-------------------------
+The program needs to use MPI. To load the module:
+
+'module load mpi/mpich-3.2-x86_64'
+
+The program then needs to be compiled. Remove the existing binary and remake:
+
+'rm cracker'
+'make'
+
+This will ensure the binary is from the most updated version of 'cracker.c'.
+
+There are two ways to execute:
+
+1. There is an included file 'slurm.sh' which provides customizable options to use the sbatch
+   utility, which parallelizes over different computers. Customize the "number of tasks" amount
+   to meet your needs and then run after changing the file's location:
+
+   'sbatch slurm.h'
+
+   This will submit the job, assuming sbatch is available on your machine.
+
+   Use 'squeue' to view the current running jobs, and 'scancel <jobid>' to cancel the program.
+
+2. Use your local machine:
+
+   'mpirun -n <desired # of nodes> ./cracker'
+
+   Fill in how many nodes the program should be split between.
+
+
+WARNING: PROGRAM IS VERY TIME INTENSIVE
+
+
+Outputs:
+--------
+
+There are two output files: log.txt, output.txt
+
+log.txt: A file filled with miscellanious checks throughout the program, including timing, word status
+         total words completed, and other various prints.
+
+output.txt: A file filled with the cracked passwords, and the rank that found each one.
+
+
+Notes on Forced Output:
+-----------------------
+
+Due to time constrainsts and intermediate errors in code, I have added a force stop to demonstate the final output 
+of the code. Each node sends the status of each names password cracking, and any non-cracked password is reported  
+by the root. For example:
+
+Rank: 0
+Password found for alice is: 99puppy
+Rank: 0
+Password found for maria is: password123
+
+Passwords not discovered:
+User: george, hash: $1$ab$tYl84YhDM6bmCOuCusTKS.
+User: bob, hash: $1$ab$0I4CGceZU1wOu9PO3qn2p/
+User: despickler, hash: $1$ab$FPyWVGc2x83IsQ7.q775k1
+User: richard, hash: $1$ab$T/Cabrtf2TgOYXhZFlRct/
+User: rmshifler, hash: $1$ab$/rOLL5LFn/3ZIa2TFnN4G.
+User: yxjing, hash: $1$ab$N9t.xxEuc93HGa.twsZuP.
+User: jtanderson, hash: $1$ab$Po1AuQSRCorWXHi8cIOhK/
+User: bfpierce, hash: $1$ab$s2uqC2lMivvj9IX5PQ8KO/
+User: rmstallman, hash: $1$ab$tThrUGNaCZBr224TYwxw2.
+
+For this code, the forceStop was updated to true when the code tested (word+suf) ==> password123. The top of 
+words.txt was edited and put puppy, then password so that rank 0 would find those early in the cracking process.
+
+In the normal run, there will be an MPI_Barrier before the print to the output file to ensure that if a password
+was in the end of each node's word count, it was discovered and updated.
+
+Notes on Known Issues:
+----------------------
+
+The log.txt REFUSES to write, no matter how much I close it or flush it. It worked before I added the ISend, IRecv and
+Test. However, the output.txt is working exactly as it should! Quite depressing!
+
+At this moment, there appears to be some memory complications, however I've done whatever I can to fix them. The ids 
+** array appears to hate me. But, I figure that since I'm mallocing a list of 11 chars, and then mallocing each of those
+to a 1 position, that is the same thing as a single * array. 
+
+There are several compilation warnings, but just ignore those. They do not like my assignment to strdup, even though
+they work perfectly as intended. The fscanf warnings would like a return value, but if I give it one, it complains about
+not using the result.. Sooooo yeah.
+
+**Current seg faulting: After a few itterations it decides to quit for the first time since I began this project so yeah.
+
+
+Questions:
+----------
+(a) What is the theoretical time complexity of your algorithms(best and worst case), in terms of the
+    input size?
+
+ Theoretically, the time complexity should be the O((i*j*k)/P), where i=11 is the number of passwords,
+ j=235888 is the number of words, k=11110 is the number of possible pre and suf combinations, and P=# of processors.
+ 
+ We have a best case when a password is discovered early, reducing i=11 down to 10, 9, 8,... for the number
+ of passwords found because they do not check a user once another node has found that password (based on 
+ MPI_Isend, MPI_Irecv, and MPI_Test). The time should also reduce for more P, but more P also means more 
+ communication costs.
+
+ We have a worst case when we don't find passwords early, or at all, and every combination needs to be tested.
+ Unfortunately for this algorithm, our best case doesn't exactly improve from the O((i*j*k)/P) time complexity
+ because the i happens to have the lowest impact, meaning (i-1*j*k) is not much better than (i*j*k).
+
+
+(b) According to the data, does adding more nodes perfectly divide the time taken by the program?
+
+ The time it takes to run the program does not perfectly divide the time. With more nodes, more communications,
+ more file writes, and more allocations and string operations occur.
+
+
+(c) Consider the problem of brute-forcing passwords under only maximum string length. How much time would
+    it take to complete this hack, extrapolating from your measurements?
+
+ The time it took to crack '99puppy' (put at the top of words.txt) was 20.90 seconds. The time it took to crack
+ 'password123' (put as word 2 of words.txt) was 282.38 seconds. These are of the best of cases:
+ 
+ 1. They are at the top of the dictionary.
+ 2. They are withing 0 < k < 123, where k goes to 9999.
+
+ These estimations are rather nice for a base case: the second password needs to wait for all iterations of 
+ 'puppy' before it reaches it. They are almost exactly 9999 iterations away from each other, which gives us
+ a base estimate of 282 seconds per word. For example, if the actual password is 5 words deep for a rank,
+ it should take approximately 282*5 = 1410 seconds to find it, which is rather cumbersome. If we have 5 nodes,
+ each node will have 47177 words. This means at most we will have 282*47177 seconds until we find that password.
+ This is 153 days. Or, if we max out the HPC with 696 nodes, theoretically it would take 1.5 days to find the most
+ extreme case passwords. Basically, (335888/p)*282 seconds for the extreme passwords.  
+ 
+
+(d) What are some real-world software examples that would need the above routines? Why? Would they benefit
+    greatly from using your distributed code?
+
+ Some real word applications include:
+ - IT security of a company attempting to crack other employees passwords to detect weak ones, in the hope of 
+   improving security.
+ - Ethical (or unethical..) hackers who are trying to gain access to private information.
+ - Military cyphering using a specific dictionary as their encryption key.. 
+
+ These applications would benefit from using this code because it runs through any dictionary provided, and any shadow
+ file provided (assuming same format: user:$id$salt$hash) and finds the password. It may take forever, but it's a start.
+ For example, building a specific dictionary and maybe tweaking to code could test for more specific parameters. For example:
+ Rachel works for a company and her birth year is 1999. We can then test to see if company members use a permutation of their
+ name and birthyear or birthmonth or etc.. as their password: "Rachel1999", "1999Rachel", "Rachel99", etc. 
+
+
+(e) How could the code be improved in terms of usability, efficiency and robustness?
+
+ This code is not the most efficient. The algorithm used runs through every word, tests every number and word combination, for 
+ each shadow provided. Every node does this same process. One way to improve this would be to assign specific nodes to split up
+ the work, such as 2 dedicated nodes to work on no pre or suf words like "cat" or "modify". The code is rather robust, it should be 
+ able to accept any dictionary file and shadow file, given the shadow file is constructed the same as the example one. If not, there
+ would need to be a change in either the shadow.txt file or the parsing algorithm, such as changing the strtok delimitter "%", ":".
+

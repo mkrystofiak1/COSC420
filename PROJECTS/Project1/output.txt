@@ -1,0 +1,4 @@
+Rank: 0
+Password found for alice is: 99puppy
+Time taken: 30.291038 seconds
+

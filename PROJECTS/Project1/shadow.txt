@@ -1,0 +1,11 @@
+george:$1$ab$tYl84YhDM6bmCOuCusTKS.
+maria:$1$ab$DC1ifnjzzu8Za5qEt96Kq0
+alice:$1$ab$DqPMoPPboZ2HTH7RfiqQs.
+bob:$1$ab$0I4CGceZU1wOu9PO3qn2p/
+despickler:$1$ab$FPyWVGc2x83IsQ7.q775k1
+richard:$1$ab$T/Cabrtf2TgOYXhZFlRct/
+rmshifler:$1$ab$/rOLL5LFn/3ZIa2TFnN4G.
+yxjing:$1$ab$N9t.xxEuc93HGa.twsZuP.
+jtanderson:$1$ab$Po1AuQSRCorWXHi8cIOhK/
+bfpierce:$1$ab$s2uqC2lMivvj9IX5PQ8KO/
+rmstallman:$1$ab$tThrUGNaCZBr224TYwxw2.
